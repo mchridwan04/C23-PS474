@@ -23,9 +23,8 @@ router.post('/register', signupValidation, (req, res, next) => {
                                           message: err
                                     });
                               } else {
-                                    // has hashed pw => add to database
                                     db.query(
-                                          `INSERT INTO users (name, email, password) VALUES ('${req.body.name}', ${db.escape(
+                                          `INSERT INTO users (username, email, password) VALUES ('${req.body.username}', ${db.escape(
                                                 req.body.email
                                           )}, ${db.escape(hash)})`,
                                           (err, result) => {
@@ -36,7 +35,7 @@ router.post('/register', signupValidation, (req, res, next) => {
                                                       });
                                                 }
                                                 return res.status(201).send({
-                                                      message: 'Register Succes'
+                                                      message: 'Register success'
                                                 });
                                           }
                                     );
@@ -86,7 +85,7 @@ router.post('/login', loginValidation, (req, res, next) => {
                                     });
                               }
                               return res.status(401).send({
-                                    msg: 'Username or password is incorrect!'
+                                    message: 'Username or password is incorrect!'
                               });
                         }
                   );
@@ -110,4 +109,91 @@ router.post('/get-user', signupValidation, (req, res, next) => {
             return res.send({ error: false, data: results[0], message: 'Fetch Successfully.' });
       });
 });
+
+router.get('/bengkels', (req, res, next) => {
+      db.query(
+            'SELECT * FROM Bengkels;',
+            (err, result) => {
+                  if (err) {
+                        throw err;
+                        return res.status(500).send({
+                              message: 'Internal Server Error'
+                        });
+                  }
+                  if (!result.length) {
+                        return res.status(404).send({
+                              message: 'No bengkels found'
+                        });
+                  }
+                  const bengkelsData = result;
+                  return res.status(200).send({
+                        message: 'Success',
+                        data: bengkelsData
+                  });
+            }
+      );
+});
+
+router.get('/bengkels/:id', (req, res, next) => {
+      const bengkelId = req.params.id;
+
+      // Query untuk mendapatkan detail bengkel
+      db.query(
+            'SELECT * FROM Bengkels WHERE id = ?',
+            [bengkelId],
+            (err, result) => {
+                  if (err) {
+                        throw err;
+                        return res.status(500).send({
+                              message: 'Internal Server Error'
+                        });
+                  }
+
+                  // Jika bengkel tidak ditemukan
+                  if (!result.length) {
+                        return res.status(404).send({
+                              message: 'Bengkel not found'
+                        });
+                  }
+
+                  const bengkelData = result[0];
+
+                  // Query untuk mendapatkan daftar jasa yang terkait dengan bengkel
+                  db.query(
+                        'SELECT * FROM Jasas WHERE idBengkel = ?',
+                        [bengkelId],
+                        (err, result) => {
+                              if (err) {
+                                    throw err;
+                                    return res.status(500).send({
+                                          message: 'Internal Server Error'
+                                    });
+                              }
+
+                              // Jika tidak ada jasa yang terkait dengan bengkel
+                              if (!result.length) {
+                                    return res.status(404).send({
+                                          message: 'No jasas found for this bengkel'
+                                    });
+                              }
+
+                              const jasasData = result;
+
+                              // Menggabungkan data bengkel dengan data jasas
+                              const responseData = {
+                                    bengkel: bengkelData,
+                                    jasas: jasasData
+                              };
+
+                              return res.status(200).send({
+                                    message: 'Success',
+                                    data: responseData
+                              });
+                        }
+                  );
+            }
+      );
+});
+
+
 module.exports = router;
