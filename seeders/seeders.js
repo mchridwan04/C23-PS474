@@ -43,6 +43,86 @@ module.exports = {
                         createdAt: new Date(),
                         updatedAt: new Date()
                   },
+                  {
+                        nama: 'Bengkel 3',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 4',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 5',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 6',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 7',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 8',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 9',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
+                  {
+                        nama: 'Bengkel 10',
+                        longitude: 12.345,
+                        latitude: 67.890,
+                        totalNilaiJumlahReview: 3.8,
+                        hariBuka: 'Tuesday',
+                        jamBuka: '09:00 AM',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                  },
                   // Add more bengkel seed data if needed
             ]);
 
