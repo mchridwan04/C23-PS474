@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "bengkel",
-    "password": "12345678",
+    "username": "root",
+    "password": null,
     "database": "capstone2023",
-    "host": "34.101.47.38",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {

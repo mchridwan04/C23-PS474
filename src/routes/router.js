@@ -85,14 +85,14 @@ router.post('/login', loginValidation, (req, res, next) => {
                                     });
                               }
                               return res.status(401).send({
-                                    message: 'Username or password is incorrect!'
+                                    message: 'Email or password is incorrect!'
                               });
                         }
                   );
             }
       );
 });
-router.post('/get-user', signupValidation, (req, res, next) => {
+router.get('/user', signupValidation, (req, res, next) => {
       if (
             !req.headers.authorization ||
             !req.headers.authorization.startsWith('Bearer') ||
@@ -106,7 +106,7 @@ router.post('/get-user', signupValidation, (req, res, next) => {
       const decoded = jwt.verify(theToken, 'the-super-strong-secrect');
       db.query('SELECT * FROM users where id=?', decoded.id, function (error, results, fields) {
             if (error) throw error;
-            return res.send({ error: false, data: results[0], message: 'Fetch Successfully.' });
+            return res.send({ error: false, data: results[0], message: 'Succes' });
       });
 });
 
