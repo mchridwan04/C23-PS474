@@ -113,35 +113,83 @@ router.get('/user', signupValidation, (req, res, next) => {
 router.get('/bengkels', (req, res, next) => {
       db.query(
             'SELECT * FROM Bengkels;',
-            (err, result) => {
+            (err, bengkelsResult) => {
                   if (err) {
                         throw err;
                         return res.status(500).send({
                               message: 'Internal Server Error'
                         });
                   }
-                  if (!result.length) {
+                  if (!bengkelsResult.length) {
                         return res.status(404).send({
                               message: 'No bengkels found'
                         });
                   }
-                  const bengkelsData = result;
-                  return res.status(200).send({
-                        message: 'Success',
-                        data: bengkelsData
-                  });
+
+                  const bengkelsData = bengkelsResult;
+
+                  // Membuat array kosong untuk menyimpan data bengkel dengan review
+                  const bengkelsWithReviews = [];
+
+                  // Iterasi setiap bengkel
+                  for (let i = 0; i < bengkelsData.length; i++) {
+                        const bengkelData = bengkelsData[i];
+
+                        // Query untuk mendapatkan review bengkel
+                        const reviewsQuery = 'SELECT * FROM Reviews WHERE idBengkel = ?';
+                        db.query(reviewsQuery, [bengkelData.id], (err, reviewsResult) => {
+                              if (err) {
+                                    throw err;
+                              }
+
+                              // Menggabungkan data bengkel dengan data review
+                              const bengkelWithReviews = {
+                                    ...bengkelData,
+                                    reviews: reviewsResult
+                              };
+
+                              // Memasukkan data bengkel dengan review ke dalam array
+                              bengkelsWithReviews.push(bengkelWithReviews);
+
+                              // Jika sudah mencapai bengkel terakhir, mengirimkan tanggapan
+                              if (i === bengkelsData.length - 1) {
+                                    return res.status(200).send({
+                                          message: 'Success',
+                                          data: bengkelsWithReviews
+                                    });
+                              }
+                        });
+                  }
             }
       );
 });
+
 
 router.get('/bengkels/:id', (req, res, next) => {
       const bengkelId = req.params.id;
 
       // Query untuk mendapatkan detail bengkel
-      db.query(
-            'SELECT * FROM Bengkels WHERE id = ?',
-            [bengkelId],
-            (err, result) => {
+      const bengkelQuery = 'SELECT * FROM Bengkels WHERE id = ?';
+      db.query(bengkelQuery, [bengkelId], (err, bengkelResult) => {
+            if (err) {
+                  throw err;
+                  return res.status(500).send({
+                        message: 'Internal Server Error'
+                  });
+            }
+
+            // Jika bengkel tidak ditemukan
+            if (!bengkelResult.length) {
+                  return res.status(404).send({
+                        message: 'Bengkel not found'
+                  });
+            }
+
+            const bengkelData = bengkelResult[0];
+
+            // Query untuk mendapatkan daftar jasa yang terkait dengan bengkel
+            const jasasQuery = 'SELECT * FROM Jasas WHERE idBengkel = ?';
+            db.query(jasasQuery, [bengkelId], (err, jasasResult) => {
                   if (err) {
                         throw err;
                         return res.status(500).send({
@@ -149,50 +197,41 @@ router.get('/bengkels/:id', (req, res, next) => {
                         });
                   }
 
-                  // Jika bengkel tidak ditemukan
-                  if (!result.length) {
+                  // Jika tidak ada jasa yang terkait dengan bengkel
+                  if (!jasasResult.length) {
                         return res.status(404).send({
-                              message: 'Bengkel not found'
+                              message: 'No jasas found for this bengkel'
                         });
                   }
 
-                  const bengkelData = result[0];
+                  const jasasData = jasasResult;
 
-                  // Query untuk mendapatkan daftar jasa yang terkait dengan bengkel
-                  db.query(
-                        'SELECT * FROM Jasas WHERE idBengkel = ?',
-                        [bengkelId],
-                        (err, result) => {
-                              if (err) {
-                                    throw err;
-                                    return res.status(500).send({
-                                          message: 'Internal Server Error'
-                                    });
-                              }
-
-                              // Jika tidak ada jasa yang terkait dengan bengkel
-                              if (!result.length) {
-                                    return res.status(404).send({
-                                          message: 'No jasas found for this bengkel'
-                                    });
-                              }
-
-                              const jasasData = result;
-
-                              // Menggabungkan data bengkel dengan data jasas
-                              const responseData = {
-                                    bengkel: bengkelData,
-                                    jasas: jasasData
-                              };
-
-                              return res.status(200).send({
-                                    message: 'Success',
-                                    data: responseData
+                  // Query untuk mendapatkan review bengkel
+                  const reviewsQuery = 'SELECT * FROM Reviews WHERE idBengkel = ?';
+                  db.query(reviewsQuery, [bengkelId], (err, reviewsResult) => {
+                        if (err) {
+                              throw err;
+                              return res.status(500).send({
+                                    message: 'Internal Server Error'
                               });
                         }
-                  );
-            }
-      );
+
+                        const reviewsData = reviewsResult;
+
+                        // Menggabungkan data bengkel, jasa, dan review
+                        const responseData = {
+                              bengkel: bengkelData,
+                              jasas: jasasData,
+                              reviews: reviewsData
+                        };
+
+                        return res.status(200).send({
+                              message: 'Success',
+                              data: responseData
+                        });
+                  });
+            });
+      });
 });
 
 
