@@ -1,0 +1,8 @@
+runtime: nodejs10
+
+env_variables:
+  NODE_ENV: production
+  DB_USER: "root"
+  DB_NAME: “bengkelin"
+  DB_PASS: "bengkelin2023"
+  DB_INSTANCE: ""
