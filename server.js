@@ -1,3 +1,5 @@
+require('@google-cloud/debug-agent').start()
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -23,4 +25,8 @@ app.use((err, req, res, next) => {
             message: err.message,
       });
 });
-app.listen(3000, () => console.log('Server is running on port 3000'));
+
+const PORT = process.env.PORT || 8000
+app.listen(PORT, () => {
+      console.log("Server is up and listening on " + PORT)
+})

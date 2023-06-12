@@ -1,18 +1,10 @@
 var mysql = require('mysql');
-
-const DB_HOST = process.env.DB_HOST;
-const DB_USER = process.env.DB_USER;
-const DB_PASS = process.env.DB_PASS;
-const DB_NAME = process.env.DB_NAME;
-
-const conn = mysql.createConnection({
-      host: `/cloudsql/${process.env.DB_INSTANCE}`,
-      user: DB_USER,
-      password: DB_PASS,
-      database: DB_NAME,
-      socketPath: `/cloudsql/${process.env.DB_INSTANCE}`,
+var conn = mysql.createConnection({
+      host: 'localhost', // Replace with your host name
+      user: 'root',      // Replace with your database username
+      password: '',   // Replace with your database password
+      database: 'capstone2023' // // Replace with your database Name
 });
-
 
 conn.connect(function (err) {
       if (err) throw err;
