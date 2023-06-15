@@ -24,6 +24,7 @@
     "mysql2": "^3.3.3",
     "req-flash": "^0.0.3",
     "sequelize": "^6.31.1",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "swagger-ui-express": "^4.6.3"
   }
 }

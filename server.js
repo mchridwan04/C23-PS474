@@ -1,5 +1,3 @@
-require('@google-cloud/debug-agent').start()
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -26,7 +24,7 @@ app.use((err, req, res, next) => {
       });
 });
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
       console.log("Server is up and listening on " + PORT)
 })

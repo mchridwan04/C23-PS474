@@ -112,7 +112,7 @@ router.get('/user', signupValidation, (req, res, next) => {
 
 router.get('/bengkels', (req, res, next) => {
       db.query(
-            'SELECT * FROM Bengkels;',
+            'SELECT * FROM bengkels;',
             (err, bengkelsResult) => {
                   if (err) {
                         throw err;
@@ -136,7 +136,7 @@ router.get('/bengkels', (req, res, next) => {
                         const bengkelData = bengkelsData[i];
 
                         // Query untuk mendapatkan review bengkel
-                        const reviewsQuery = 'SELECT * FROM Reviews WHERE idBengkel = ?';
+                        const reviewsQuery = 'SELECT * FROM reviews WHERE idBengkel = ?';
                         db.query(reviewsQuery, [bengkelData.id], (err, reviewsResult) => {
                               if (err) {
                                     throw err;
@@ -169,7 +169,7 @@ router.get('/bengkels/:id', (req, res, next) => {
       const bengkelId = req.params.id;
 
       // Query untuk mendapatkan detail bengkel
-      const bengkelQuery = 'SELECT * FROM Bengkels WHERE id = ?';
+      const bengkelQuery = 'SELECT * FROM bengkels WHERE id = ?';
       db.query(bengkelQuery, [bengkelId], (err, bengkelResult) => {
             if (err) {
                   throw err;
@@ -188,7 +188,7 @@ router.get('/bengkels/:id', (req, res, next) => {
             const bengkelData = bengkelResult[0];
 
             // Query untuk mendapatkan daftar jasa yang terkait dengan bengkel
-            const jasasQuery = 'SELECT * FROM Jasas WHERE idBengkel = ?';
+            const jasasQuery = 'SELECT * FROM jasas WHERE idBengkel = ?';
             db.query(jasasQuery, [bengkelId], (err, jasasResult) => {
                   if (err) {
                         throw err;
@@ -207,7 +207,7 @@ router.get('/bengkels/:id', (req, res, next) => {
                   const jasasData = jasasResult;
 
                   // Query untuk mendapatkan review bengkel
-                  const reviewsQuery = 'SELECT * FROM Reviews WHERE idBengkel = ?';
+                  const reviewsQuery = 'SELECT * FROM reviews WHERE idBengkel = ?';
                   db.query(reviewsQuery, [bengkelId], (err, reviewsResult) => {
                         if (err) {
                               throw err;
@@ -233,6 +233,82 @@ router.get('/bengkels/:id', (req, res, next) => {
             });
       });
 });
+
+router.post('/transaksis', (req, res, next) => {
+      const { idUser, jasaIds } = req.body;
+
+      // Memeriksa apakah pengguna yang dimaksud ada dalam database
+      const userQuery = 'SELECT * FROM users WHERE id = ?';
+      db.query(userQuery, [idUser], (err, userResult) => {
+            if (err) {
+                  throw err;
+                  return res.status(500).send({
+                        message: 'Internal Server Error'
+                  });
+            }
+
+            // Jika pengguna tidak ditemukan
+            if (!userResult.length) {
+                  return res.status(404).send({
+                        message: 'User not found'
+                  });
+            }
+
+            // Memeriksa apakah jasa-jasa yang dimaksud ada dalam database
+            const jasasQuery = 'SELECT * FROM jasas WHERE id IN (?)';
+            db.query(jasasQuery, [jasaIds], (err, jasasResult) => {
+                  if (err) {
+                        throw err;
+                        return res.status(500).send({
+                              message: 'Internal Server Error'
+                        });
+                  }
+
+                  // Memeriksa apakah jumlah jasa yang ditemukan sama dengan jumlah jasa yang diminta
+                  if (jasasResult.length !== jasaIds.length) {
+                        return res.status(404).send({
+                              message: 'One or more jasas not found'
+                        });
+                  }
+
+                  // Menghitung total biaya transaksi
+                  const totalBiaya = jasasResult.reduce((total, jasa) => total + jasa.biaya, 0);
+
+                  // Membuat data transaksi baru dalam database
+                  const createTransaksiQuery = 'INSERT INTO transaksis (idBengkel, idUser, idJasa, totalBiaya, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)';
+
+                  const currentTime = new Date();
+                  const values = jasasResult.map(jasa => [
+                        jasa.idBengkel,
+                        idUser,
+                        jasa.id,
+                        jasa.biaya,
+                        currentTime,
+                        currentTime
+                  ]);
+
+                  db.query(createTransaksiQuery, [values], (err, result) => {
+                        if (err) {
+                              throw err;
+                              return res.status(500).send({
+                                    message: 'Internal Server Error'
+                              });
+                        }
+
+                        return res.status(201).send({
+                              message: 'Transaksi created successfully',
+                              data: {
+                                    id: result.insertId,
+                                    idUser,
+                                    jasas: jasasResult,
+                                    totalBiaya
+                              }
+                        });
+                  });
+            });
+      });
+});
+
 
 
 module.exports = router;

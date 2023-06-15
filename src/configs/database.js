@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('capstone2023', 'root', '', {
+const sequelize = new Sequelize('replace name database', 'root', '', {
       host: 'localhost',
 });
 
