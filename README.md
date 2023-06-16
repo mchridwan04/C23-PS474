@@ -2,13 +2,13 @@
 <br />
 <div align="center">
   <a href="Logo Bangkit">
-    <img src="./assets/bangkit.jpg" alt="Logo" width="80" height="80">
+    <img src="./assets/bengkelin.png" alt="Logo" width="150">
   </a>
 
   <h3 align="center">BENGKELIN</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    An application that can predict tire conditions and display the nearest repair shop.
     <br />
   </p>
 </div>
@@ -23,35 +23,56 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Our team is developing a mobile app that uses machine learning to detect tire quality, recommends vehicle workshops, and provides automotive care advice. Our aim is to enhance road safety by raising awareness about tire condition and maintenance, and gworth the SMEs Economic of the Vehicle Workshop. Many vehicle owners lack knowledge about tire quality and struggle to find suitable spare parts and workshops. Our solution will address these issues with a user friendly interface and comprehensive features.
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+## TEAMS
 
-Here's why:
+- M299DSX2926 - Rafiq Ramadhan - Universitas Pancasila - Machine Learning - [active]
+- M299DSX0285 - N.I.S. Baldanullah - Universitas Pancasila - Machine Learning - [active]
+- C265DSX0666 - Mochammad Ridwan - Universitas Muria Kudus - Cloud Computing - [active]
+- C265DKY4234 - Salum Ainayya Alfatikhah - Universitas Muria Kudus - Cloud Computing - [active]
+- A299DSX2287 - Muhammad Rizky Fadhillah - Universitas Pancasila - Mobile Development - [active]
+- A062DSX2274 - Dwitio Ahmad Pranoto - Politeknik Negeri Jakarta - Mobile Development - [active]
 
-- Your time should be focused on creating something amazing. A project that solves a problem and helps others
-- You shouldn't be doing the same tasks over and over like creating a README from scratch
-- You should implement DRY principles to the rest of your life :smile:
+## TECH STACK
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+- Node JS
+- Express JS
+- Flask
+- Python
+- MySQL Database
 
-Use the `BLANK_README.md` to get started.
+## Getting Started
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+1. Clone the backend
+   ```sh
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+2. Dwonload machine learning model
+   ```link
+   https://drive.google.com/drive/folders/1ZxJEnUIdWLq3ppA8NKQod_gRYmQTDgAg?usp=drive_link
+   ```
+3. Change database `src/configs/dbConnection.js`
 
-### Built With
+   ```js
+   const conn = mysql.createConnection({
+     host: "", // Replace with your host name
+     user: "", // Replace with your database username
+     password: "", // Replace with your database password
+     database: "", // // Replace with your database Name
+   });
+   ```
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-- [![Next][Next.js]][Next-url]
-- [![React][React.js]][React-url]
-- [![Vue][Vue.js]][Vue-url]
-- [![Angular][Angular.io]][Angular-url]
-- [![Svelte][Svelte.dev]][Svelte-url]
-- [![Laravel][Laravel.com]][Laravel-url]
-- [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-- [![JQuery][JQuery.com]][JQuery-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
+4. Copy model file in `machineLearning folder`
+5. Install dependencies
+   ```sh
+   npm install
+   ```
+6. Migration database
+   ```sh
+   npx sequelize-cli db:migrate
+   ```
+7. Run
+   ```sh
+   node server.js
+   ```
